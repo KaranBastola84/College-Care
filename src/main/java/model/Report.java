@@ -3,59 +3,96 @@ package model;
 import java.util.Date;
 
 public class Report {
-    private int reportId;
-    private int userId;
-    private int itemId;
-    private String status; // e.g., "Lost", "Found", "Returned"
-    private Date dateReported;
+    private int report_id;
+    private int user_id;
+    private String req_type;
+    private String location;
+    private java.sql.Date date_reported;
+    private String status;
+    private String item_name;
+    private String item_type;
+    private String description;
+    private byte[] image;
 
     public Report() {}
 
-    public Report(int reportId, int userId, int itemId, String status, Date dateReported) {
-        this.reportId = reportId;
-        this.userId = userId;
-        this.itemId = itemId;
+    public Report(int report_id, int user_id, String req_type, String location, java.sql.Date date_reported,
+                  String status, String item_name, String item_type, String description, byte[] image) {
+        this.report_id = report_id;
+        this.user_id = user_id;
+        this.req_type = req_type;
+        this.location = location;
+        this.date_reported = date_reported;
         this.status = status;
-        this.dateReported = dateReported;
+        this.item_name = item_name;
+        this.item_type = item_type;
+        this.description = description;
+        this.image = image;
     }
 
     public int getReportId() {
-        return reportId;
+        return report_id;
     }
 
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
+    public void setReportId(int report_id) {
+        this.report_id = report_id;
     }
+
 
     public int getUserId() {
-        return userId;
+        return user_id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserId(int user_id) {
+        this.user_id = user_id;
     }
 
-    public int getItemId() {
-        return itemId;
+    public String getReqType() {
+        return req_type;
     }
-
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
+    public void setReqType(String req_type) {
+        this.req_type = req_type;
     }
-
+    public String getLocation() {
+        return location;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    public java.sql.Date getDateReported() {
+        return date_reported;
+    }
+    public void setDateReported(java.sql.Date date_reported) {
+        this.date_reported = date_reported;
+    }
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public Date getDateReported() {
-        return dateReported;
+    public String getItemName() {
+        return item_name;
     }
-
-    public void setDateReported(Date dateReported) {
-        this.dateReported = dateReported;
+    public void setItemName(String item_name) {
+        this.item_name = item_name;
+    }
+    public String getItemType() {
+        return item_type;
+    }
+    public void setItemType(String item_type) {
+        this.item_type = item_type;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public byte[] getImage() {
+        return image;
+    }
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
