@@ -1,34 +1,56 @@
 package model;
 
 public class Contact {
-    private int contactId;
-    private int userId;
+    private int contact_id;
+    private int user_id;
+    private String name;
+    private String email;
     private String subject;
     private String message;
+    private java.sql.Timestamp msgSent;
 
     public Contact() {}
 
-    public Contact(int contactId, int userId, String subject, String message) {
-        this.contactId = contactId;
-        this.userId = userId;
+    public Contact(int contact_id, int user_id, String name, String email, String subject, String message, java.sql.Timestamp msgSent) {
+        this.contact_id = contact_id;
+        this.user_id = user_id;
+        this.name = name;
+        this.email = email;
         this.subject = subject;
         this.message = message;
+        this.msgSent = msgSent;
     }
 
     public int getContactId() {
-        return contactId;
+        return contact_id;
     }
 
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setContactId(int contact_id) {
+        this.contact_id = contact_id;
     }
 
     public int getUserId() {
-        return userId;
+        return user_id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserId(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSubject() {
@@ -45,5 +67,13 @@ public class Contact {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public java.sql.Timestamp getMsgSent() {
+        return msgSent;
+    }
+
+    public void setMsgSent(java.sql.Timestamp msgSent) {
+        this.msgSent = msgSent;
     }
 }

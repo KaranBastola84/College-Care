@@ -2,7 +2,7 @@ package model;
 
 import java.util.Date;
 public class User {
-    private int id;
+    private int user_id;
     private String fullname;
     private String email;
     private String phone;
@@ -12,9 +12,10 @@ public class User {
     private String dateofbirth;
     private String gender;
     private byte[] profilePicture;
+    private String role;
 
-    public User(int id,String fullname, String email, String phone, String address, String username, String password, String gender, String dateofbirth, byte[] profilePicture) {
-        this.id = id;
+    public User(int user_id,String fullname, String email, String phone, String address, String username, String password, String gender, String dateofbirth, byte[] profilePicture, String role) {
+        this.user_id = user_id;
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
@@ -23,13 +24,14 @@ public class User {
         this.password = password;
         this.gender = gender;
         this.dateofbirth = dateofbirth;
+        this.role = role;
         this.profilePicture = profilePicture;
     }
     public int getId() {
-        return id;
+        return user_id;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int user_id) {
+        this.user_id = user_id;
     }
     public String getFullname() {
         return fullname;
@@ -84,5 +86,11 @@ public class User {
     }
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }
