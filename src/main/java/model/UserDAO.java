@@ -23,31 +23,31 @@ public class UserDAO {
         return DriverManager.getConnection(URL, USER, PASS);
     }
     public static int addUser(User user) {
-        String query = "INSERT INTO user (username, email, password, fullname, dateofbirth, gender, phone, address, profilePicture, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user (full_name, email, phone, address, username, password, dateofbirth, gender, profilePicture, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, user.getUsername());
+            ps.setString(5, user.getUsername());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getFullname());
+            ps.setString(6, user.getPassword());
+            ps.setString(1, user.getFullname());
             try {
-                String dobString = user.getDateofbirth();
+                java.sql.Date dobString = user.getDateofbirth();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date parsedDate = (Date) sdf.parse(dobString);
-                ps.setDate(5, new java.sql.Date(parsedDate.getTime()));
+                Date parsedDate = (Date) sdf.parse(String.valueOf(dobString));
+                ps.setDate(7, new java.sql.Date(parsedDate.getTime()));
             } catch (ParseException e) {
-                ps.setNull(5, java.sql.Types.DATE);
+                ps.setNull(7, java.sql.Types.DATE);
             }
 
-            ps.setString(6, user.getGender());
-            ps.setString(7, user.getPhone());
-            ps.setString(8, user.getAddress());
-            ps.setString(9,user.getRole());
+            ps.setString(8, user.getGender());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getAddress());
+            ps.setString(10,user.getRole());
             // Handling Profile Picture (if not null)
             if (user.getProfilePicture() != null) {
-                ps.setBytes(10, user.getProfilePicture()); // Store image as BLOB
+                ps.setBytes(9, user.getProfilePicture()); // Store image as BLOB
             } else {
-                ps.setNull(10, Types.BLOB); // If no image, set NULL
+                ps.setNull(9, Types.BLOB); // If no image, set NULL
             }
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -65,41 +65,44 @@ public class UserDAO {
     }
     // Authunicate User
     public static User getUserByEmailOrUsername(String emailOrUsername, String password) {
-        String query = "SELECT * FROM user WHERE (email = ? OR username = ?) AND password = ?";
+        String query = "SELECT * FROM user WHERE email = ? OR username = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
             ps.setString(1, emailOrUsername);
             ps.setString(2, emailOrUsername);
-            ps.setString(3, password);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return new User(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("fullName"),
-                        rs.getString("dateofbirth"),
-                        rs.getString("gender"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getBytes("profilePicture"),
-                        rs.getString("role")
-                         // Binary image data
-                );
+                String hashedPassword = rs.getString("password");
+
+                // Use your utility class to verify password
+                if (PasswordHash.verifyPassword(password, hashedPassword)) {
+                    return new User(
+                            rs.getInt("user_id"),
+                            rs.getString("full_name"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("username"),
+                            hashedPassword,
+                            rs.getDate("dateofbirth"),
+                            rs.getString("gender"),
+                            rs.getBytes("profilePicture"),
+                            rs.getString("role")
+                    );
+                }
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return null; // Return null if authentication fails
+        return null;
     }
 
+
     public static boolean updateUser(User user) {
-        String query = "UPDATE user SET password = ?, fullName = ?, dateOfBirth = ?, gender = ?, phone = ?, address = ?, profilePicture = ? WHERE user_id = ?";
+        String query = "UPDATE user SET password = ?, full_name = ?, dateOfBirth = ?, gender = ?, phone = ?, address = ?, profilePicture = ? WHERE user_id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -107,7 +110,7 @@ public class UserDAO {
             ps.setString(1, user.getPassword()); // Ensure password is hashed before storing
             ps.setString(2, user.getFullname());
             try {
-                String dobString = user.getDateofbirth();
+                String dobString = String.valueOf(user.getDateofbirth());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date parsedDate = (Date) sdf.parse(dobString);
                 ps.setDate(5, new java.sql.Date(parsedDate.getTime()));

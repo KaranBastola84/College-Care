@@ -7,18 +7,18 @@ public class Contact {
     private String email;
     private String subject;
     private String message;
-    private java.sql.Timestamp msgSent;
+    private java.sql.Timestamp msg_sent;
 
     public Contact() {}
 
-    public Contact(int contact_id, int user_id, String name, String email, String subject, String message, java.sql.Timestamp msgSent) {
+    public Contact(int contact_id, int user_id, String name, String email, String subject, String message, java.sql.Timestamp msg_sent) {
         this.contact_id = contact_id;
         this.user_id = user_id;
         this.name = name;
         this.email = email;
         this.subject = subject;
         this.message = message;
-        this.msgSent = msgSent;
+        this.msg_sent = msg_sent;
     }
 
     public int getContactId() {
@@ -69,11 +69,11 @@ public class Contact {
         this.message = message;
     }
 
-    public java.sql.Timestamp getMsgSent() {
-        return msgSent;
+    public java.sql.Timestamp getMsg_sent() {
+        return msg_sent;
     }
 
-    public void setMsgSent(java.sql.Timestamp msgSent) {
-        this.msgSent = msgSent;
+    public void setMsg_sent(java.sql.Timestamp msg_sent) {
+        this.msg_sent = msg_sent;
     }
 }

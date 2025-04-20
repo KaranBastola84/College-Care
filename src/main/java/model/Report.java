@@ -9,25 +9,29 @@ public class Report {
     private String location;
     private java.sql.Date date_reported;
     private String status;
+    private int item_id;
     private String item_name;
-    private String item_type;
-    private String description;
     private byte[] image;
+    private String description;
+    private int item_type_id;
+    private String item_type;
 
     public Report() {}
 
     public Report(int report_id, int user_id, String req_type, String location, java.sql.Date date_reported,
-                  String status, String item_name, String item_type, String description, byte[] image) {
+                  String status,int item_id, String item_name, byte[] image, String description, int item_type_id, String item_type) {
         this.report_id = report_id;
         this.user_id = user_id;
         this.req_type = req_type;
         this.location = location;
         this.date_reported = date_reported;
         this.status = status;
+        this.item_id = item_id;
         this.item_name = item_name;
-        this.item_type = item_type;
-        this.description = description;
         this.image = image;
+        this.description = description;
+        this.item_type_id = item_type_id;
+        this.item_type = item_type;
     }
 
     public int getReportId() {
@@ -71,17 +75,24 @@ public class Report {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getItem_id() {
+        return item_id;
+    }
+    public void setItemId(int item_id) {
+        this.item_id = item_id;
+    }
     public String getItemName() {
         return item_name;
     }
     public void setItemName(String item_name) {
         this.item_name = item_name;
     }
-    public String getItemType() {
-        return item_type;
+    public byte[] getImage() {
+        return image;
     }
-    public void setItemType(String item_type) {
-        this.item_type = item_type;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
     public String getDescription() {
         return description;
@@ -89,10 +100,17 @@ public class Report {
     public void setDescription(String description) {
         this.description = description;
     }
-    public byte[] getImage() {
-        return image;
+    public int getItem_type_id() {
+        return item_type_id;
     }
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setItemTypeId(int item_type_id) {
+        this.item_type_id = item_type_id;
+    }
+
+    public String getItemType() {
+        return item_type;
+    }
+    public void setItemType(String item_type) {
+        this.item_type = item_type;
     }
 }
