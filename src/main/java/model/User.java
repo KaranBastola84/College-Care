@@ -2,20 +2,21 @@ package model;
 
 import java.util.Date;
 public class User {
-    private int id;
-    private String fullname;
+    private int user_id;
+    private String full_name;
     private String email;
     private String phone;
     private String address;
     private String username;
     private String password;
-    private String dateofbirth;
+    private java.sql.Date dateofbirth;
     private String gender;
     private byte[] profilePicture;
+    private String role;
 
-    public User(int id,String fullname, String email, String phone, String address, String username, String password, String gender, String dateofbirth, byte[] profilePicture) {
-        this.id = id;
-        this.fullname = fullname;
+    public User(int user_id, String full_name, String email, String phone, String address, String username, String password, java.sql.Date dateofbirth, String gender, byte[] profilePicture, String role) {
+        this.user_id = user_id;
+        this.full_name = full_name;
         this.email = email;
         this.phone = phone;
         this.address = address;
@@ -23,19 +24,25 @@ public class User {
         this.password = password;
         this.gender = gender;
         this.dateofbirth = dateofbirth;
+        this.role = role;
         this.profilePicture = profilePicture;
     }
-    public int getId() {
-        return id;
+
+    public User(String full_name, String email, String phone, String address, String username, String password, java.sql.Date dateofbirth, String gender, byte[] profilePicture, String role) {
+    this(0, full_name, email, phone, address, username, password, dateofbirth, gender, profilePicture, role);
     }
-    public void setId(int id) {
-        this.id = id;
+
+    public int getId() {
+        return user_id;
+    }
+    public void setId(int user_id) {
+        this.user_id = user_id;
     }
     public String getFullname() {
-        return fullname;
+        return full_name;
     }
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullname(String full_name) {
+        this.full_name = full_name;
     }
     public String getEmail() {
         return email;
@@ -67,12 +74,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getDateofbirth() {
+    public java.sql.Date getDateofbirth() {
         return dateofbirth;
     }
-    public void setDateofbirth(String dateofbirth) {
+    public void setDateofbirth(java.sql.Date dateofbirth) {
         this.dateofbirth = dateofbirth;
     }
+
     public String getGender() {
         return gender;
     }
@@ -84,5 +92,11 @@ public class User {
     }
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }
