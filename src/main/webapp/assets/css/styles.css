@@ -1,0 +1,202 @@
+/*index.jsp*/
+
+/* Base Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header Styles */
+.top-header {
+    background-color: #16a34a;
+    color: white;
+    padding: 0.75rem 0;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.logo a {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.logo a:hover {
+    color: #dcfce7;
+}
+
+.desktop-nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 0.5rem;
+    padding-right: 10px;
+}
+
+.desktop-nav a:hover {
+    text-decoration: underline;
+}
+
+.separator {
+    margin: 0 0.5rem;
+}
+
+.main-nav {
+    background-color: #22c55e;
+    padding: 0.5rem 0;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.nav-list li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.nav-list li a:hover {
+    background-color: #16a34a;
+}
+
+.how-it-works {
+    padding: 3rem 0;
+    background-color: #fff;
+}
+
+.section-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-header h2 {
+    font-size: 1.875rem;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+}
+
+.section-header p {
+    color: #4b5563;
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.steps-container {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.step-card {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.step-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #1a1a1a;
+}
+
+.step-card p {
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 0.9375rem;
+}
+
+.icon-circle {
+    background-color: #dcfce7;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.icon-circle i {
+    color: #16a34a;
+    font-size: 1.5rem;
+}
+
+/* Contact Section */
+.footer-contact h3 {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #4b5563;
+}
+
+.contact-item i {
+    width: 1.25rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .steps-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .steps-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .footer-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer-contact {
+        padding-left: 12.5rem;
+    }
+}
+

@@ -13,11 +13,12 @@ import java.io.InputStream;
 
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024,  // 1 MB
-        maxFileSize = 1024 * 1024 * 5,     // 5 MB
-        maxRequestSize = 1024 * 1024 * 10   // 10 MB
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
 )
 public class RegisterServlet extends HttpServlet {
+    private static final String ADMIN_APPROVAL_CODE = "1430";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
@@ -35,23 +36,46 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String role = request.getParameter("Role");
+        String approvalCode = request.getParameter("approvalCode");
 
+        if ("admin".equalsIgnoreCase(role)) {
+            if (approvalCode == null || approvalCode.trim().isEmpty()) {
+                request.setAttribute("error", "Admin approval code is required");
+                request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+                return;
+            } else if (!ADMIN_APPROVAL_CODE.equals(approvalCode.trim())) {
+                request.setAttribute("error", "Invalid admin approval code");
+                request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+                return;
+            }
+        }
         boolean hasError = false;
         String errorMessage = "";
-
-        // Check if passwords match
-        if (rawPassword == null || confirmPassword == null || !rawPassword.equals(confirmPassword)) {
-            hasError = true;
-            errorMessage = "Passwords do not match";
+        if (rawPassword.length() < 8 ||
+                !rawPassword.matches(".*[A-Z].*") ||
+                !rawPassword.matches(".*[a-z].*") ||
+                !rawPassword.matches(".*\\d.*")) {
+            request.setAttribute("error", "Password must be at least 8 characters with uppercase, lowercase, and numbers");
+            request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+            return;
         }
 
-        // Hash the password only if no error
         String hashedPassword = null;
         if (!hasError) {
             hashedPassword = PasswordHash.hashPassword(rawPassword);
         }
+        if (rawPassword == null || confirmPassword == null || !rawPassword.equals(confirmPassword)) {
+            hasError = true;
+            errorMessage = "Passwords do not match";
+        }
+        if (!rawPassword.equals(confirmPassword)) {
+            request.setAttribute("error", "Passwords do not match");
+            request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+            return;
+        }
 
-        // Parse date of birth
+
+
         java.sql.Date dateofbirth = null;
         if (dobStr != null && !dobStr.isEmpty()) {
             try {
@@ -62,7 +86,6 @@ public class RegisterServlet extends HttpServlet {
             }
         }
 
-        // Handle profile picture upload
         byte[] profilePicture = null;
         Part filePart = request.getPart("profilePicture");
         if (filePart != null && filePart.getSize() > 0) {
@@ -72,7 +95,6 @@ public class RegisterServlet extends HttpServlet {
             }
         }
 
-        // Validate required fields
         if (username == null || username.trim().isEmpty() ||
                 email == null || email.trim().isEmpty() ||
                 fullname == null || fullname.trim().isEmpty() ||
@@ -87,10 +109,8 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // Create user object
         User newUser = new User(fullname, email, phone, address, username, hashedPassword, dateofbirth, gender, profilePicture, role);
 
-        // Add user to database
         int userId = UserDAO.addUser(newUser);
 
         if (userId > 0) {

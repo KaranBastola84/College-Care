@@ -42,3 +42,5 @@ CREATE TABLE IF NOT EXISTS ContactUS (
                                        msg_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                        FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+ALTER TABLE User MODIFY password VARCHAR(255);
