@@ -31,11 +31,13 @@ public class UserDAO {
             ps.setString(6, user.getPassword());
             ps.setString(1, user.getFullname());
             try {
-                java.sql.Date dobString = user.getDateofbirth();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date parsedDate = (Date) sdf.parse(String.valueOf(dobString));
-                ps.setDate(7, new java.sql.Date(parsedDate.getTime()));
-            } catch (ParseException e) {
+                java.sql.Date dob = user.getDateofbirth();
+                if (dob != null) {
+                    ps.setDate(7, dob);
+                } else {
+                    ps.setNull(7, java.sql.Types.DATE);
+                }
+            } catch (Exception e) {
                 ps.setNull(7, java.sql.Types.DATE);
             }
 
@@ -45,15 +47,15 @@ public class UserDAO {
             ps.setString(10,user.getRole());
             // Handling Profile Picture (if not null)
             if (user.getProfilePicture() != null) {
-                ps.setBytes(9, user.getProfilePicture()); // Store image as BLOB
+                ps.setBytes(9, user.getProfilePicture());
             } else {
-                ps.setNull(9, Types.BLOB); // If no image, set NULL
+                ps.setNull(9, Types.BLOB);
             }
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
-                        return rs.getInt(1); // Return the new user ID
+                        return rs.getInt(1);
                     }
                 }
             }
@@ -61,9 +63,9 @@ public class UserDAO {
             System.err.println(e.getMessage());
             throw new RuntimeException(e);
         }
-        return -1; // Return -1 if insertion fails
+        return -1;
     }
-    // Authunicate User
+
     public static User getUserByEmailOrUsername(String emailOrUsername, String password) {
         String query = "SELECT * FROM user WHERE email = ? OR username = ?";
 
@@ -77,7 +79,7 @@ public class UserDAO {
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
 
-                // Use your utility class to verify password
+
                 if (PasswordHash.verifyPassword(password, hashedPassword)) {
                     return new User(
                             rs.getInt("user_id"),
@@ -107,7 +109,7 @@ public class UserDAO {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, user.getPassword()); // Ensure password is hashed before storing
+            ps.setString(1, user.getPassword());
             ps.setString(2, user.getFullname());
             try {
                 String dobString = String.valueOf(user.getDateofbirth());
@@ -116,33 +118,32 @@ public class UserDAO {
                 ps.setDate(5, new java.sql.Date(parsedDate.getTime()));
             } catch (ParseException e) {
                 ps.setNull(5, java.sql.Types.DATE);
-            } // Convert Date to SQL Date
+            }
             ps.setString(4, user.getGender());
             ps.setString(5, user.getPhone());
             ps.setString(6, user.getAddress());
 
-            // Handling Profile Picture
+
             if (user.getProfilePicture() != null) {
-                ps.setBytes(7, user.getProfilePicture()); // Update image
+                ps.setBytes(7, user.getProfilePicture());
             } else {
-                ps.setNull(7, Types.BLOB); // If no new image, set NULL
             }
 
-            ps.setInt(8, user.getId()); // WHERE condition (ensures ID remains unchanged)
+            ps.setInt(8, user.getId());
 
-            // Execute update and check if successful
+
             int affectedRows = ps.executeUpdate();
-            return affectedRows > 0; // Returns true if update was successful
+            return affectedRows > 0;
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return false; // Return false if update fails
+        return false;
     }
 
-    // Method to update user password
+
     public static boolean updatePassword(int userId, String currentPassword, String newPassword) {
-        // First verify the current password
+
         String verifyQuery = "SELECT password FROM user WHERE user_id = ?";
         String updateQuery = "UPDATE user SET password = ? WHERE user_id = ?";
 
@@ -150,16 +151,16 @@ public class UserDAO {
              PreparedStatement psVerify = conn.prepareStatement(verifyQuery);
              PreparedStatement psUpdate = conn.prepareStatement(updateQuery)) {
 
-            // Verify current password
+
             psVerify.setInt(1, userId);
             ResultSet rs = psVerify.executeQuery();
 
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
 
-                // If current password matches, update to new password
+
                 if (storedPassword.equals(currentPassword)) {
-                    psUpdate.setString(1, newPassword); // Should hash the password in a real application
+                    psUpdate.setString(1, newPassword);
                     psUpdate.setInt(2, userId);
 
                     int affectedRows = psUpdate.executeUpdate();
@@ -170,10 +171,9 @@ public class UserDAO {
             System.err.println(e.getMessage());
         }
 
-        return false; // Return false if password update fails
+        return false;
     }
 
-    // Method to delete user by username/email and password
     public static boolean deleteUser(String emailOrUsername, String password) {
         String queryCheck = "SELECT user_id, password FROM user WHERE (email = ? OR username = ?)";
         String queryDelete = "DELETE FROM user WHERE user_id = ?";
@@ -182,24 +182,22 @@ public class UserDAO {
              PreparedStatement psCheck = conn.prepareStatement(queryCheck);
              PreparedStatement psDelete = conn.prepareStatement(queryDelete)) {
 
-            // Step 1: Check if the username/email and password match
             psCheck.setString(1, emailOrUsername);
             psCheck.setString(2, emailOrUsername);
             ResultSet rs = psCheck.executeQuery();
 
             if (rs.next()) {
                 int userId = rs.getInt("user_id");
-                String storedPassword = rs.getString("password"); // Get stored password
+                String storedPassword = rs.getString("password");
 
-                if (!storedPassword.equals(password)) { // Compare passwords
+                if (!PasswordHash.verifyPassword(password, storedPassword)) {
                     System.out.println("Incorrect password. User deletion failed.");
                     return false;
                 }
 
-                // Step 2: If password matches, delete the user
                 psDelete.setInt(1, userId);
                 int affectedRows = psDelete.executeUpdate();
-                return affectedRows > 0; // Returns true if deletion was successful
+                return affectedRows > 0;
             } else {
                 System.out.println("User not found with that username/email.");
                 return false;
@@ -208,6 +206,6 @@ public class UserDAO {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return false; // Return false if deletion fails
+        return false;
     }
 }

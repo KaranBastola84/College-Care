@@ -18,23 +18,20 @@ import java.io.InputStream;
 
 @WebServlet(name = "UpdateProfileServlet", value = "/UpdateProfileServlet")
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024, // 1 MB
-        maxFileSize = 1024 * 1024 * 5,   // 5 MB
-        maxRequestSize = 1024 * 1024 * 10 // 10 MB
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
 )
 public class UpdateProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Check if user is logged in
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("user") == null) {
-            // User not logged in, redirect to login page
             response.sendRedirect(request.getContextPath() + "/LoginServlet");
             return;
         }
 
-        // Forward to edit profile page
         request.getRequestDispatcher("/WEB-INF/view/editprofile.jsp").forward(request, response);
     }
 
@@ -48,7 +45,6 @@ public class UpdateProfileServlet extends HttpServlet {
 
         User currentUser = (User) session.getAttribute("user");
 
-        // Get form parameters
         String password = request.getParameter("password");
         String fullName = request.getParameter("full_name"); // Correct variable name
         String dateOfBirthStr = request.getParameter("dateofbirth");
@@ -56,20 +52,18 @@ public class UpdateProfileServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
 
-        // Verify password (compare hashed password)
         if (!PasswordHash.verifyPassword(password, currentUser.getPassword())) {
             request.setAttribute("error", "Incorrect password. Profile update failed.");
             request.getRequestDispatcher("/WEB-INF/view/editprofile.jsp").forward(request, response);
             return;
         }
 
-        // Parse date of birth into java.sql.Date
         Date dateOfBirth = null;
         try {
             if (dateOfBirthStr != null && !dateOfBirthStr.trim().isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date utilDate = sdf.parse(dateOfBirthStr);
-                dateOfBirth = new Date(utilDate.getTime()); // Convert to sql.Date
+                dateOfBirth = new Date(utilDate.getTime());
             }
         } catch (ParseException e) {
             request.setAttribute("error", "Invalid date format. Use YYYY-MM-DD.");
@@ -77,7 +71,6 @@ public class UpdateProfileServlet extends HttpServlet {
             return;
         }
 
-        // Handle profile picture upload (existing code is correct)
         byte[] profilePicture = currentUser.getProfilePicture();
         Part filePart = request.getPart("profilePicture");
         if (filePart != null && filePart.getSize() > 0) {
@@ -95,15 +88,13 @@ public class UpdateProfileServlet extends HttpServlet {
             }
         }
 
-        // Update user object (FIXED TYPOS)
-        currentUser.setFullname(fullName); // Correct variable name
-        currentUser.setDateofbirth(dateOfBirth); // Correct method name and variable
+        currentUser.setFullname(fullName);
+        currentUser.setDateofbirth(dateOfBirth);
         currentUser.setGender(gender);
         currentUser.setPhone(phone);
         currentUser.setAddress(address);
         currentUser.setProfilePicture(profilePicture);
 
-        // Update database
         boolean updateSuccess = UserDAO.updateUser(currentUser);
 
         if (updateSuccess) {
