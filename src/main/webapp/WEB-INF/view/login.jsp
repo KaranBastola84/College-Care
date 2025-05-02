@@ -125,6 +125,7 @@
 </head>
 <body>
 <div class="container">
+
     <div style="margin-bottom: 1.5rem;">
         <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">Login</h1>
         <p style="color: #4b5563;">Enter your credentials to access your account</p>
