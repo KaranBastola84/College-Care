@@ -44,3 +44,6 @@ CREATE TABLE IF NOT EXISTS ContactUS (
 );
 
 ALTER TABLE User MODIFY password VARCHAR(255);
+
+ALTER TABLE user
+    MODIFY profilePicture LONGBLOB;
