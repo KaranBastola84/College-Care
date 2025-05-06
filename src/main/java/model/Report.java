@@ -15,6 +15,7 @@ public class Report {
     private String description;
     private int item_type_id;
     private String item_type;
+    private transient String username;
 
     public Report() {}
 
@@ -75,7 +76,8 @@ public class Report {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
     public int getItem_id() {
         return item_id;
     }

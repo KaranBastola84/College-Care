@@ -1,4 +1,4 @@
-/*index.jsp*/
+/* index.jsp */
 
 /* Base Styles */
 body {
@@ -19,13 +19,22 @@ body {
     background-color: #16a34a;
     color: white;
     height: 50px;
+    padding-left: 100px;
 }
-
+.top-header-admin
+{
+    background-color: #16a34a;
+    height: 80px;
+    display: flex;
+    align-items: end;
+    padding: 10px;
+}
 .header-container {
     display: flex;
     align-items: end;
     height: 20px;
     padding-top: 15px;
+    padding-right: 100px;
 }
 
 .desktop-nav a:active {
@@ -77,7 +86,7 @@ body {
 
 .how-it-works {
     padding: 3rem 0;
-    background-color: #a7f3d0;
+    background-color: #baefcc;
 }
 
 .section-container {
@@ -427,11 +436,102 @@ button {
 }
 
 .lost {
-    background-color: #2c6da4;
+    background-color: #baefcc;
     color: white;
 }
 
 .found {
     background-color: #e5e5e5;
     color: #333;
+}
+
+/* Lost Reports Section */
+.lost-reports {
+    padding: 40px 20px;
+    background-color: rgba(145, 230, 216, 0.41);
+}
+.contact-admin{
+    padding: 40px 20px;
+    background-color: #baefcc;
+}
+
+.section-container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-header h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.reports-placeholder {
+    padding: 30px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #fff;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    color: #777;
+}
+
+/* Contact Form */
+.contact-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    max-width: 800px;
+    margin: auto;
+}
+
+.contact-left, .contact-right {
+    flex: 1;
+    min-width: 250px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.ctact-form textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.contact-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.contact-form button:hover {
+    background-color: #218838;
+}
+
+.required {
+    color: red;
 }

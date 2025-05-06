@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS User (
                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
 CREATE TABLE IF NOT EXISTS Report (
                                       report_id INT PRIMARY KEY AUTO_INCREMENT,
                                       user_id INT,
@@ -47,3 +49,30 @@ ALTER TABLE User MODIFY password VARCHAR(255);
 
 ALTER TABLE user
     MODIFY profilePicture LONGBLOB;
+
+ALTER TABLE Report
+    MODIFY image LONGBLOB;
+
+
+-- Remove invalid item_id column from Report
+ALTER TABLE Report DROP COLUMN item_id;
+
+-- Add missing date_lost column
+ALTER TABLE Report ADD COLUMN date_lost DATE AFTER location;
+
+-- Create item_types table
+CREATE TABLE IF NOT EXISTS item_types (
+                                          item_type_id INT PRIMARY KEY AUTO_INCREMENT,
+                                          type_name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Insert default categories
+INSERT INTO item_types (type_name) VALUES
+                                       ('Electronics'), ('Books'), ('Clothing'),
+                                       ('Accessories'), ('Documents'), ('Other');
+
+-- Modify Report table to use proper foreign key
+ALTER TABLE Report MODIFY item_type_id INT,
+                   ADD FOREIGN KEY (item_type_id) REFERENCES item_types(item_type_id);
+
+ALTER TABLE Report MODIFY COLUMN date_lost DATE COMMENT 'For lost items: date lost, for found items: date found';

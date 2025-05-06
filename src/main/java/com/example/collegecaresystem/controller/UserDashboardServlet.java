@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet("/user/dashboard")
+@WebServlet(name = "UserDashboardServlet", value = "/UserDashboardServlet")
 public class UserDashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

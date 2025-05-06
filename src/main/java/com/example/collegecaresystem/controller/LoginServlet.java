@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.User;
 import model.UserDAO;
-
+import com.example.collegecaresystem.utils.DBConnectionUtil;
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
@@ -95,9 +95,9 @@ public class LoginServlet extends HttpServlet {
         String contextPath = request.getContextPath();
 
         if ("admin".equalsIgnoreCase(role)) {
-            response.sendRedirect(contextPath + "/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + "/AdminDashboardServlet");
         } else {
-            response.sendRedirect(contextPath + "/user/dashboard");
+            response.sendRedirect(request.getContextPath() + "/UserDashboardServlet");
         }
     }
 

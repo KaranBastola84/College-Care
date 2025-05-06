@@ -17,264 +17,239 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --main-bg: #f6f4fc;
-            --sidebar-bg: #ffffff;
-            --accent-color: #6c4bc1;
-            --progress-bg: #f3f3f3;
-            --card-bg: #fff;
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            --border-radius: 20px;
-            --lost-color: #f2b01e;
-            --found-color: #3da5f4;
-            --lost-bg: #fff8e1;
-            --found-bg: #e3f2fd;
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --warning-color: #f44336;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
         body {
-            background: var(--main-bg);
-            padding: 2rem;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr 300px;
-            gap: 2rem;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            box-shadow: var(--card-shadow);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
         }
 
         .sidebar {
-            background: var(--sidebar-bg);
-            border-radius: var(--border-radius);
-            padding: 1rem;
+            width: 220px;
+            background-color: #fff;
+
+            position: fixed;
+            height: 100%;
+
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+
+        }
+        .sidebar nav a[aria-current="page"] {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+        .sidebar-content {
+            padding-top: 30px;
         }
 
         .sidebar h2 {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            text-decoration: none;
-            color: black;
-            background-color: #f2f0fb;
-        }
-
-        .nav-link.active {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .status-boxes {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .status-box {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 40px;
         }
 
-        .status-box.lost { background-color: var(--lost-color); color: white; }
-        .status-box.found { background-color: var(--found-color); color: white; }
-
-        .quick-search {
-            background: var(--card-bg);
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
+        .sidebar nav a {
+            padding: 12px 30px;
+            display: block;
+            color: black;
+            text-decoration: none;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
 
-        .quick-search input {
+        .sidebar nav a:hover {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .signout1 {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px auto;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 180px;
+            display: block;
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            background-color: #fff;
+            border-left: 5px solid;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.orange {
+            border-color: orange;
+        }
+
+        .card.teal {
+            border-color: teal;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .card p {
+            margin: 5px 0 0;
+            color: gray;
+        }
+
+        .search-box input {
+            padding: 8px;
             width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-            margin-bottom: 1rem;
+            margin: 15px 0;
+            box-sizing: border-box;
+        }
+
+        .charts, .recent {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .chart, .recent-box {
+            background: #ffffff;
+            padding: 15px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .chart {
+            background: #f2ecec;
+        }
+
+        .recent-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recent-box li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0d6d6;
+        }
+
+        h2 {
+            font-size: 18px;
         }
 
         canvas {
-            margin-top: 1rem;
             width: 100% !important;
-            max-height: 250px;
-        }
-
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .card-list {
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-        }
-
-        .card-list h4 {
-            margin-bottom: 0.5rem;
-        }
-
-        .card-list.lost-items {
-            background: var(--lost-bg);
-            border-left: 6px solid var(--lost-color);
-        }
-
-        .card-list.found-items {
-            background: var(--found-bg);
-            border-left: 6px solid var(--found-color);
-        }
-
-        .item {
-            margin-bottom: 1rem;
-        }
-
-        .item:last-child {
-            margin-bottom: 0;
+            height: 250px !important;
         }
     </style>
 </head>
 <body>
-<div class="dashboard">
-    <aside class="sidebar">
-        <div>
-            <h2>Ideas here</h2>
-            <a href="#" class="nav-link active">Dashboard</a>
-            <a href="#" class="nav-link">Items</a>
-            <a href="#" class="nav-link">Reports</a>
-            <a href="#" class="nav-link">Settings</a>
-        </div>
-    </aside>
+<div class="sidebar">
+    <div class="sidebar-content">
+        <h2 href="/">Lost and Found</h2>
+        <nav aria-label="Main navigation">
+            <a href="${pageContext.request.contextPath}/Dashboard.jsp" aria-current="page">Dashboard</a>
+            <a href="/WEB-INF/view/admin/items.jsp">Items</a>
+            <a href="/WEB-INF/view/admin/report.jsp">Report</a>
+            <a href="/WEB-INF/view/admin/setting.jsp">Settings</a>x
+        </nav>
+    </div>
+    <form action="${pageContext.request.contextPath}/LogoutServlet" method="post">
+        <button type="submit" class="signout1" aria-label="Sign out">Sign Out</button>
+    </form>
+</div>
 
-    <main class="main-content">
-        <div class="status-boxes">
-            <div class="status-box lost">
-                <h3>61</h3>
-                <p>Show Lost Items</p>
-            </div>
-            <div class="status-box found">
-                <h3>19</h3>
-                <p>Show Found Items</p>
-            </div>
+<div class="main">
+    <h1>Dashboard</h1>
+    <div class="dashboard-header">
+        <div class="card orange">
+            <h3>61</h3>
+            <p>Reported lost</p>
         </div>
+        <div class="card teal">
+            <h3>71</h3>
+            <p>Items found</p>
+        </div>
+    </div>
 
-        <div class="quick-search">
-            <h4>Quick Search</h4>
-            <input type="text" placeholder="Search Items">
-            <canvas id="lostFoundChart"></canvas>
-        </div>
-    </main>
+    <section aria-label="Search section">
+        <form class="search-box" role="search">
+            <input type="search" placeholder="Search items..." aria-label="Search items by name" />
+        </form>
+    </section>
 
-    <aside class="right-panel">
-        <div class="card-list lost-items">
-            <h4>Recently Lost Items</h4>
-            <div class="item">
-                <strong>Device</strong>: Laptop<br>
-                <strong>Color</strong>: Black Yellow<br>
-                <strong>Details</strong>: Laptop slightly scratched
-            </div>
-            <div class="item">
-                <strong>Camera</strong>: Digital SLR<br>
-                <strong>Model</strong>: Nikon V1<br>
-                <strong>Serial</strong>: 123WWWG98NDK
-            </div>
-            <div class="item">
-                <strong>Key</strong>: Bike Key<br>
-                <strong>Color</strong>: Brown<br>
-                <strong>Details</strong>: Holds lab equipment
-            </div>
+    <div class="charts">
+        <div class="chart">
+            <h2>Lost Items (last month)</h2>
+            <canvas id="lostChart"></canvas>
         </div>
+        <div class="chart">
+            <h2>Found Items (last month)</h2>
+            <canvas id="foundChart"></canvas>
+        </div>
+    </div>
 
-        <div class="card-list found-items">
-            <h4>Recently Found Items</h4>
-            <div class="item">
-                <strong>Bag</strong>: Leather<br>
-                <strong>Color</strong>: Brown<br>
-                <strong>Features</strong>: Books and Laptop<br>
-                <strong>Details</strong>: Newly logged
-            </div>
-            <div class="item">
-                <strong>Device</strong>: Laptop<br>
-                <strong>Color</strong>: Black Yellow<br>
-                <strong>Details</strong>: Laptop slightly scratched
-            </div>
-            <div class="item">
-                <strong>Key</strong>: Car Key<br>
-                <strong>Color</strong>: Brown<br>
-                <strong>Details</strong>: Slightly scratched
-            </div>
+    <div class="recent">
+        <div class="recent-box">
+            <h2>Recently Lost Items</h2>
+            <ul id="lost-list">
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+            </ul>
         </div>
-    </aside>
+        <div class="recent-box">
+            <h2>Recently Found Items</h2>
+            <ul id="found-list">
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <script>
-    const ctx = document.getElementById('lostFoundChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [
-                {
-                    label: 'Lost Items',
-                    data: [3, 4, 2, 5, 3, 6, 4],
-                    backgroundColor: 'transparent',
-                    borderColor: '#f2b01e',
-                    tension: 0.4
-                },
-                {
-                    label: 'Found Items',
-                    data: [1, 2, 1, 3, 2, 4, 3],
-                    backgroundColor: 'transparent',
-                    borderColor: '#3da5f4',
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+    // Dynamic content population example
+    document.addEventListener('DOMContentLoaded', () => {
+        // Populate recent items
+        const recentItems = {
+            lost: ['Backpack (Oct 10)', 'Phone (Oct 9)', 'Keys (Oct 8)'],
+            found: ['Wallet (Oct 10)', 'Glasses (Oct 9)', 'Watch (Oct 8)']
+        };
+
+        populateList('lost-list', recentItems.lost);
+        populateList('found-list', recentItems.found);
+
+        function populateList(listId, items) {
+            const list = document.getElementById(listId);
+            list.innerHTML = items.map(item => `<li><strong>${item}</strong></li>`).join('');
         }
     });
 </script>
+
 </body>
 </html>
