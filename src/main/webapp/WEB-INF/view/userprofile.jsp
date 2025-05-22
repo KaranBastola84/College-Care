@@ -11,18 +11,18 @@
     <title>User Profile</title>
 </head>
 <body>
-<h1>Welcome, ${userDTO.fullName}</h1>
-<% if (request.getAttribute("success") != null) { %>
-<p style="color: green;"><%= request.getAttribute("success") %></p>
-<% } %>
-<% if (request.getAttribute("error") != null) { %>
-<p style="color: red;"><%= request.getAttribute("error") %></p>
-<% } %>
+    <h1>Welcome, ${userDTO.fullName}</h1>
+    <% if (request.getAttribute("success") != null) { %>
+    <p style="color: green;"><%= request.getAttribute("success") %></p>
+    <% } %>
+    <% if (request.getAttribute("error") != null) { %>
+    <p style="color: red;"><%= request.getAttribute("error") %></p>
+    <% } %>
 
-<p>Email: ${userDTO.email}</p>
-<p>Role: ${userDTO.role}</p>
+    <p>Email: ${userDTO.email}</p>
+    <p>Role: ${userDTO.role}</p>
 
-<a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a><br>
-<a href="${pageContext.request.contextPath}/DeleteAccountServlet">Delete Account</a>
+    <a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a><br>
+    <a href="${pageContext.request.contextPath}/DeleteAccountServlet">Delete Account</a>
 </body>
 </html>

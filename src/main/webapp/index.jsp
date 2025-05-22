@@ -152,15 +152,15 @@
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Devit Rai<br>np05cp4a230048@iic.edu.np</span>
+                        <span>Devit Rai<br>devitrai@gmail.com</span>
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Rohit Shah<br>mike.johnson@lostfound.edu</span>
+                        <span>Rohit Shah<br>rohitshah@gmail.com</span>
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Diwakar Yadav<br>sarah.williams@lostfound.edu</span>
+                        <span>Diwakar Yadav<br>diwakaryadav@gmail.com</span>
                     </div>
                 </div>
             </div>
