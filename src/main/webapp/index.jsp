@@ -152,15 +152,15 @@
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Devit Rai<br>devitrai@gmail.com</span>
+                        <span>Devit Rai<br>devitrai56@gmail.com</span>
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Rohit Shah<br>rohitshah@gmail.com</span>
+                        <span>Rohit Shah<br>rohitshah67@gmail.com</span>
                     </div>
                     <div class="team-member">
                         <i class="fas fa-user icon-sm"></i>
-                        <span>Diwakar Yadav<br>diwakaryadav@gmail.com</span>
+                        <span>Diwakar Yadav<br>diwakaryadav88@gmail.com</span>
                     </div>
                 </div>
             </div>
