@@ -33,7 +33,7 @@ public class SubmitFoundItemServlet extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/LoginServlet");
             return;
         }
 
@@ -44,7 +44,7 @@ public class SubmitFoundItemServlet extends HttpServlet {
             String dateFound = getPartValue(request, "dateFound");
             String brand = getPartValue(request, "brand");
             String location = getPartValue(request, "location");
-            String additionalInfo = getPartValue(request, "additionalInfo");
+            String description1 = getPartValue(request, "description");
 
             // Validate required fields
             if (itemName.isEmpty() || category.isEmpty() || dateFound.isEmpty() || location.isEmpty()) {
@@ -64,7 +64,7 @@ public class SubmitFoundItemServlet extends HttpServlet {
             description.append("Found Date: ").append(dateFound).append("\n");
             if (!brand.isEmpty()) description.append("Brand: ").append(brand).append("\n");
             description.append("Location: ").append(location).append("\n");
-            description.append("Additional Details: ").append(additionalInfo);
+            description.append("Additional Details: ").append(description1);
 
             try (Connection conn = DBConnectionUtil.getConnection()) {
                 // Get category ID from database
@@ -78,8 +78,8 @@ public class SubmitFoundItemServlet extends HttpServlet {
                     stmt.setInt(1, user.getId());
                     stmt.setString(2, "found");
                     stmt.setString(3, location);
-                    stmt.setDate(4, Date.valueOf(LocalDate.parse(dateFound)));  // Date found
-                    stmt.setDate(5, Date.valueOf(LocalDate.now()));             // Report date
+                    stmt.setDate(4, Date.valueOf(LocalDate.parse(dateFound)));
+                    stmt.setDate(5, Date.valueOf(LocalDate.now()));
                     stmt.setString(6, "unclaimed");
                     stmt.setString(7, itemName);
 
@@ -99,7 +99,7 @@ public class SubmitFoundItemServlet extends HttpServlet {
                     } else {
                         session.setAttribute("error", "Failed to save found item report");
                     }
-                    response.sendRedirect(request.getContextPath() + "/submit-found");
+                    response.sendRedirect(request.getContextPath() + "/SubmitFoundItemServlet");
                 }
             }
         } catch (Exception e) {

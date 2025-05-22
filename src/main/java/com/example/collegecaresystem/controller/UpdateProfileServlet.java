@@ -1,5 +1,6 @@
 package com.example.collegecaresystem.controller;
 
+import com.example.collegecaresystem.dto.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -32,6 +33,21 @@ public class UpdateProfileServlet extends HttpServlet {
             return;
         }
 
+        // Create UserDTO from User and set as request attribute
+        User currentUser = (User) session.getAttribute("user");
+        UserDTO userDTO = new UserDTO(currentUser);
+        request.setAttribute("userDTO", userDTO);
+        
+        // Forward success/error messages if they exist in session
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+        request.setAttribute("success", success);
+        request.setAttribute("error", error);
+        
+        // Clear session attributes to prevent displaying messages multiple times
+        session.removeAttribute("success");
+        session.removeAttribute("error");
+        
         request.getRequestDispatcher("/WEB-INF/view/editprofile.jsp").forward(request, response);
     }
 
@@ -45,12 +61,18 @@ public class UpdateProfileServlet extends HttpServlet {
 
         User currentUser = (User) session.getAttribute("user");
 
-        String password = request.getParameter("password");
         String fullName = request.getParameter("full_name"); // Correct variable name
         String dateOfBirthStr = request.getParameter("dateofbirth");
         String gender = request.getParameter("gender");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
+        String password = request.getParameter("password");
+
+        if (password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Password field is required");
+            request.getRequestDispatcher("/WEB-INF/view/editprofile.jsp").forward(request, response);
+            return;
+        }
 
         if (!PasswordHash.verifyPassword(password, currentUser.getPassword())) {
             request.setAttribute("error", "Incorrect password. Profile update failed.");
@@ -63,7 +85,7 @@ public class UpdateProfileServlet extends HttpServlet {
             if (dateOfBirthStr != null && !dateOfBirthStr.trim().isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date utilDate = sdf.parse(dateOfBirthStr);
-                dateOfBirth = new Date(utilDate.getTime());
+                dateOfBirth = new java.sql.Date(utilDate.getTime()); // Correct conversion
             }
         } catch (ParseException e) {
             request.setAttribute("error", "Invalid date format. Use YYYY-MM-DD.");

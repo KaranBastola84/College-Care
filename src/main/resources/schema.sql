@@ -76,3 +76,12 @@ ALTER TABLE Report MODIFY item_type_id INT,
                    ADD FOREIGN KEY (item_type_id) REFERENCES item_types(item_type_id);
 
 ALTER TABLE Report MODIFY COLUMN date_lost DATE COMMENT 'For lost items: date lost, for found items: date found';
+
+ALTER TABLE Report
+    MODIFY image LONGBLOB;
+
+ALTER TABLE ContactUS
+    RENAME TO contact;
+
+ALTER TABLE Report MODIFY date_lost DATE NULL;
+

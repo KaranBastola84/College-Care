@@ -1,118 +1,181 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Report {
-    private int report_id;
-    private int user_id;
-    private String req_type;
+    private int reportId;
+    private int userId;
+    private String reqType;
     private String location;
-    private java.sql.Date date_reported;
+    private java.sql.Date dateReported;
+    private java.util.Date dateLost;
     private String status;
-    private int item_id;
-    private String item_name;
+    private int itemId;
+    private String itemName;
     private byte[] image;
     private String description;
-    private int item_type_id;
-    private String item_type;
+    private int itemTypeId;
+    private String itemType;
     private transient String username;
+    private String imageBase64;
 
     public Report() {}
 
-    public Report(int report_id, int user_id, String req_type, String location, java.sql.Date date_reported,
-                  String status,int item_id, String item_name, byte[] image, String description, int item_type_id, String item_type) {
-        this.report_id = report_id;
-        this.user_id = user_id;
-        this.req_type = req_type;
+    public Report(int reportId, int userId, String reqType, String location, java.sql.Date dateReported,
+                  String status, int itemId, String itemName, byte[] image, String description, int itemTypeId, String itemType) {
+        this.reportId = reportId;
+        this.userId = userId;
+        this.reqType = reqType;
         this.location = location;
-        this.date_reported = date_reported;
+        this.dateReported = dateReported;
         this.status = status;
-        this.item_id = item_id;
-        this.item_name = item_name;
+        this.itemId = itemId;
+        this.itemName = itemName;
         this.image = image;
         this.description = description;
-        this.item_type_id = item_type_id;
-        this.item_type = item_type;
+        this.itemTypeId = itemTypeId;
+        this.itemType = itemType;
+
     }
 
     public int getReportId() {
-        return report_id;
+        return reportId;
     }
 
-    public void setReportId(int report_id) {
-        this.report_id = report_id;
+    public void setReportId(int reportId) {
+        this.reportId = reportId;
     }
-
 
     public int getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getReqType() {
-        return req_type;
+        return reqType;
     }
-    public void setReqType(String req_type) {
-        this.req_type = req_type;
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
     }
+
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
+
     public java.sql.Date getDateReported() {
-        return date_reported;
+        return dateReported;
     }
-    public void setDateReported(java.sql.Date date_reported) {
-        this.date_reported = date_reported;
+
+    public void setDateReported(java.sql.Date dateReported) {
+        this.dateReported = dateReported;
     }
+
+    public Date getDateLost() {
+        return (Date) dateLost;
+    }
+
+    public void setDateLost(java.util.Date dateLost) {
+        this.dateLost = dateLost;
+    }
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public int getItem_id() {
-        return item_id;
+
+    public String getUsername() {
+        return username;
     }
-    public void setItemId(int item_id) {
-        this.item_id = item_id;
+
+    public void setUsername(String username) {
+        this.username = username;
     }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
     public String getItemName() {
-        return item_name;
+        return itemName;
     }
-    public void setItemName(String item_name) {
-        this.item_name = item_name;
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
+
     public byte[] getImage() {
         return image;
     }
+
     public void setImage(byte[] image) {
         this.image = image;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
-    public int getItem_type_id() {
-        return item_type_id;
+
+    public int getItemTypeId() {
+        return itemTypeId;
     }
-    public void setItemTypeId(int item_type_id) {
-        this.item_type_id = item_type_id;
+
+    public void setItemTypeId(int itemTypeId) {
+        this.itemTypeId = itemTypeId;
     }
 
     public String getItemType() {
-        return item_type;
+        return itemType;
     }
-    public void setItemType(String item_type) {
-        this.item_type = item_type;
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
+    public String getStatusBadge() {
+        switch (status.toLowerCase()) {
+            case "open": return "<span class='status open'>Open</span>";
+            case "resolved": return "<span class='status resolved'>Resolved</span>";
+            case "pending": return "<span class='status pending'>Pending</span>";
+            default: return "<span class='status'>" + status + "</span>";
+        }
+    }
+
+    public String getTypeBadge() {
+        if ("lost".equalsIgnoreCase(reqType)) {
+            return "<span class='tag lost'>Lost</span>";
+        }
+        return "<span class='tag found'>Found</span>";
+    }
+
+    public Date getSafeDateLost() {
+        return this.dateLost != null ? (Date) this.dateLost : new Date(System.currentTimeMillis());
+    }
+
 }

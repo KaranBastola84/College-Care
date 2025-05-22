@@ -77,27 +77,27 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                String hashedPassword = rs.getString("password");
-
-
-                if (PasswordHash.verifyPassword(password, hashedPassword)) {
-                    return new User(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("username"),
-                            hashedPassword,
-                            rs.getDate("dateofbirth"),
-                            rs.getString("gender"),
-                            rs.getBytes("profilePicture"),
-                            rs.getString("role")
-                    );
+                // Verify password first
+                if (!PasswordHash.verifyPassword(password, rs.getString("password"))) {
+                    return null;
                 }
+
+                return new User(
+                        rs.getInt("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("username"), // Make sure this matches column name
+                        rs.getString("password"),
+                        rs.getDate("dateofbirth"),
+                        rs.getString("gender"),
+                        rs.getBytes("profilePicture"),
+                        rs.getString("role")
+                );
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("DAO Error: " + e.getMessage());
         }
         return null;
     }
@@ -111,32 +111,33 @@ public class UserDAO {
 
             ps.setString(1, user.getPassword());
             ps.setString(2, user.getFullname());
-            try {
-                String dobString = String.valueOf(user.getDateofbirth());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date parsedDate = (Date) sdf.parse(dobString);
-                ps.setDate(5, new java.sql.Date(parsedDate.getTime()));
-            } catch (ParseException e) {
-                ps.setNull(5, java.sql.Types.DATE);
+
+            // Directly use java.sql.Date from User object
+            java.sql.Date dob = user.getDateofbirth();
+            if (dob != null) {
+                ps.setDate(3, dob);
+            } else {
+                ps.setNull(3, Types.DATE);
             }
+
             ps.setString(4, user.getGender());
             ps.setString(5, user.getPhone());
             ps.setString(6, user.getAddress());
 
-
+            // Handle profile picture
             if (user.getProfilePicture() != null) {
                 ps.setBytes(7, user.getProfilePicture());
             } else {
+                ps.setNull(7, Types.BLOB);
             }
 
             ps.setInt(8, user.getId());
-
 
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
 
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Update error: " + e.getMessage());
         }
         return false;
     }

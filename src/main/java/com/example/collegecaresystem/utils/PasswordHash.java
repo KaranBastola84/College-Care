@@ -8,6 +8,9 @@ public class PasswordHash {
     }
 
     public static boolean verifyPassword(String plainPassword, String hashedPassword) {
+        if (plainPassword == null || hashedPassword == null) {
+            return false;
+        }
         BCrypt.Result result = BCrypt.verifyer().verify(plainPassword.toCharArray(), hashedPassword);
         return result.verified;
     }

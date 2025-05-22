@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
 
-@WebServlet(name = "SubmitLostItemServlet", value = "/SubmitLostItemServlet")
+@WebServlet(name = "SubmitLostItemServlet", value = "/submit-lost")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5)
 public class SubmitLostItemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -80,6 +80,11 @@ public class SubmitLostItemServlet extends HttpServlet {
 
                     int affectedRows = stmt.executeUpdate();
 
+                    if (affectedRows > 0) {
+                        session.setAttribute("success", "Item reported successfully!");
+                    } else {
+                        session.setAttribute("error", "Failed to save report");
+                    }
                     if (affectedRows > 0) {
                         session.setAttribute("success", "Item reported successfully!");
                     } else {

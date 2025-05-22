@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("registrationSuccess", registrationSuccess);
             request.getSession().removeAttribute("registrationSuccess");
         }
-
+        request.getSession().invalidate();
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
     }
 
@@ -70,7 +70,10 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("userId", user.getId());
             session.setAttribute("loggedIn", true);
+            session.setAttribute("authenticated", true);
+
 
             if (rememberMe != null && rememberMe.equals("on")) {
                 String cookieValue = encodeCookieValue(username, password);

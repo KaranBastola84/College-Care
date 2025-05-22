@@ -1,20 +1,19 @@
+
+<%@ page language="java" session="true" %>
+<%
+    if (session.getAttribute("user") == null) {
+        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+        return;
+    }
+%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<c:if test="${not empty success}">
-    <div class="bg-green-100 p-3 mb-4 rounded-lg">
-            ${success}
-    </div>
-</c:if>
-<c:if test="${not empty error}">
-    <div class="bg-red-100 p-3 mb-4 rounded-lg">
-            ${error}
-    </div>
-</c:if>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     <title>College Lost & Found</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -41,7 +40,30 @@
         }
     </style>
 </head>
+<header>
+    <%-- Top Header --%>
+    <div class="top-header">
+        <div class="header-container" style="display: flex; justify-content: flex-end; align-items: center;">
+            <div class="desktop-nav" style="margin-top: 10px">
+                <a href="${pageContext.request.contextPath}/LoginServlet">Login</a>
+                <span class="separator">|</span>
+                <a href="${pageContext.request.contextPath}/RegisterServlet" style="margin-right: 50px;">Register</a>
+            </div>
+        </div>
+    </div>
 
+
+    <%-- Main Navigation --%>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a href="${pageContext.request.contextPath}/submit-lost">Submit Lost Item</a></li>
+                <li><a href="${pageContext.request.contextPath}/SubmitFoundItemServlet">Submit Found Item</a></li>
+                <li><a href="${pageContext.request.contextPath}/RecentPostsServlet">View Recent Posts</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
 <body class="bg-gradient-to-br from-yellow-100 to-white text-gray-800">
 
 <main class="container mx-auto px-4 py-10">
@@ -51,8 +73,12 @@
     </div>
 
     <div class="bg-white glass rounded-2xl shadow-lg p-8">
-        <form class="grid grid-cols-1 md:grid-cols-2 gap-6"  enctype="multipart/form-data" method="post" action="SubmitFoundItemServlet">
-            <div>
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-6"
+              enctype="multipart/form-data"
+              method="post"
+              action="${pageContext.request.contextPath}/SubmitFoundItemServlet">
+
+        <div>
                 <label class="block text-sm font-semibold mb-1">What was Found *</label>
                 <input type="text" name="item" placeholder="e.g. Phone, Notebook, Keys" class="w-full border border-gray-300 rounded-lg p-2" required />
             </div>
@@ -110,5 +136,83 @@
 
 
 </body>
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-columns">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <a href="${pageContext.request.contextPath}/">
+                        <img src="${pageContext.request.contextPath}/assets/images/laflogo.png" alt="Lost & Found Logo" class="footer-logo-img">
+                    </a>
+                </div>
+                <h4 class="footer-title">Lost & Found System</h4>
+                <p class="footer-text">A digital platform connecting lost items with their owners</p>
+                <div class="team-credits">
+                    <div class="team-member">
+                        <i class="fas fa-user icon-sm"></i>
+                        <span>Karan Bastola<br>bnstkaran84@gmail.com</span>
+                    </div>
+                    <div class="team-member">
+                        <i class="fas fa-user icon-sm"></i>
+                        <span>Devit Rai<br>np05cp4a230048@iic.edu.np</span>
+                    </div>
+                    <div class="team-member">
+                        <i class="fas fa-user icon-sm"></i>
+                        <span>Rohit Shah<br>mike.johnson@lostfound.edu</span>
+                    </div>
+                    <div class="team-member">
+                        <i class="fas fa-user icon-sm"></i>
+                        <span>Diwakar Yadav<br>sarah.williams@lostfound.edu</span>
+                    </div>
+                </div>
+            </div>
 
+            <div class="footer-section">
+                <h4 class="footer-title">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="${pageContext.request.contextPath}/submit-lost" class="footer-link">
+                        <i class="fas fa-search-minus icon-sm"></i> Report Lost Item
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/submit-found" class="footer-link">
+                        <i class="fas fa-search-plus icon-sm"></i> Submit Found Item
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/LoginServlet" class="footer-link">
+                        <i class="fas fa-sign-in-alt icon-sm"></i> User Login
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/RegisterServlet" class="footer-link">
+                        <i class="fas fa-user-plus icon-sm"></i> Create Account
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-title">Contact Support</h4>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <div class="contact-details">
+                            <span class="contact-label">Email Support</span>
+                            <a href="mailto:help@lostfound.edu" class="contact-link">np05cp4a230154@iic.edu.np</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <div class="contact-details">
+                            <span class="contact-label">Phone Support</span>
+                            <a href="tel:1234567890" class="contact-link">+9779826320515</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                &copy; 2025 Lost & Found System. All rights reserved.
+            </div>
+            <div class="footer-credits">
+                Developed with <i class="fas fa-heart icon-xs"></i> by Team C2
+            </div>
+        </div>
+    </div>
+</footer>
 </html>
